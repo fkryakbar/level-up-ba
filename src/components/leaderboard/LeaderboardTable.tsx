@@ -1,0 +1,147 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { baData } from "@/lib/data";
+import { useApp } from "@/components/app-provider";
+import StatusBadge from "@/components/ui/StatusBadge";
+
+type Filter = "all" | "perform" | "under";
+type SortKey = "xp" | "sellout" | "x2c" | "review";
+
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "perform", label: "Perform" },
+  { key: "under", label: "Underperform" },
+];
+
+const SORTABLE: { key: SortKey; label: string }[] = [
+  { key: "xp", label: "XP ↕" },
+  { key: "sellout", label: "Sellout ↕" },
+  { key: "x2c", label: "X2C ↕" },
+  { key: "review", label: "Review ↕" },
+];
+
+export default function LeaderboardTable() {
+  const { showToast } = useApp();
+  const [filter, setFilter] = useState<Filter>("all");
+  const [term, setTerm] = useState("");
+  const [sort, setSort] = useState<{ key: SortKey; dir: "asc" | "desc" }>({
+    key: "xp",
+    dir: "desc",
+  });
+
+  const rows = useMemo(() => {
+    let data = [...baData];
+    if (filter !== "all") data = data.filter((x) => x.status === filter);
+    if (term) data = data.filter((x) => x.name.toLowerCase().includes(term.toLowerCase()));
+    data.sort((a, b) => {
+      const av = a[sort.key];
+      const bv = b[sort.key];
+      return sort.dir === "asc" ? av - bv : bv - av;
+    });
+    return data;
+  }, [filter, term, sort]);
+
+  const toggleSort = (key: SortKey) => {
+    setSort((prev) =>
+      prev.key === key
+        ? { key, dir: prev.dir === "asc" ? "desc" : "asc" }
+        : { key, dir: "desc" }
+    );
+  };
+
+  const exportCsv = () => {
+    const header = ["Rank", "Name", "XP", "Sellout", "X2C", "Review", "Streak", "Status"];
+    const csv = [header, ...rows.map((u, i) => [i + 1, u.name, u.xp, u.sellout, u.x2c, u.review, u.streak, u.status])]
+      .map((row) => row.map((v) => `"${String(v).replaceAll('"', '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "level-up-ba-leaderboard.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Leaderboard exported to CSV.");
+  };
+
+  return (
+    <div className="card panel">
+      <div className="toolbar">
+        <input
+          className="input"
+          placeholder="Search BA..."
+          style={{ maxWidth: 300 }}
+          value={term}
+          onChange={(e) => setTerm(e.target.value)}
+        />
+        <div className="toolbar-actions">
+          {FILTERS.map((f) => (
+            <button
+              key={f.key}
+              className={`btn ${filter === f.key ? "primary" : ""}`}
+              onClick={() => setFilter(f.key)}
+            >
+              {f.label}
+            </button>
+          ))}
+          <button className="btn" onClick={exportCsv}>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Brand Ambassador</th>
+              {SORTABLE.map((s) => (
+                <th key={s.key} className="sortable" onClick={() => toggleSort(s.key)}>
+                  {s.label}
+                </th>
+              ))}
+              <th>Streak</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={8} style={{ textAlign: "center", color: "var(--muted)" }}>
+                  No BA found.
+                </td>
+              </tr>
+            ) : (
+              rows.map((user, index) => (
+                <tr key={user.name}>
+                  <td>
+                    <b>{index + 1}</b>
+                  </td>
+                  <td>
+                    <div className="usercell">
+                      <span className="miniavatar">{user.avatar}</span>
+                      <b>{user.name}</b>
+                    </div>
+                  </td>
+                  <td style={{ color: "var(--teal)", fontWeight: 800 }}>
+                    {user.xp.toLocaleString()}
+                  </td>
+                  <td>{user.sellout}%</td>
+                  <td>{user.x2c}</td>
+                  <td>{user.review}</td>
+                  <td>{user.streak ? "🔥".repeat(Math.min(user.streak, 3)) + user.streak : "—"}</td>
+                  <td>
+                    <StatusBadge status={user.status} />
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
