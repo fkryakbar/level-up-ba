@@ -64,12 +64,12 @@ export const baData: BaRecord[] = [
   { name: "Norcahyanti", avatar: "👩🏽", xp: 980, sellout: 27, x2c: 96, review: 14, streak: 3, status: "perform" },
   { name: "Alya", avatar: "👩🏻", xp: 850, sellout: 24, x2c: 91, review: 13, streak: 2, status: "perform" },
   { name: "Nor Allinda", avatar: "👩🏻", xp: 620, sellout: 21, x2c: 84, review: 12, streak: 2, status: "perform" },
-  { name: "Revalina Bahri", avatar: "👩🏽", xp: 600, sellout: 18, x2c: 79, review: 11, streak: 1, status: "under" },
-  { name: "Sari Purnama", avatar: "👩🏻", xp: 580, sellout: 17, x2c: 76, review: 10, streak: 1, status: "under" },
-  { name: "Rahma", avatar: "👩🏽", xp: 540, sellout: 16, x2c: 72, review: 10, streak: 1, status: "under" },
-  { name: "Nadia", avatar: "👩🏻", xp: 515, sellout: 15, x2c: 68, review: 9, streak: 0, status: "under" },
-  { name: "Fitri", avatar: "👩🏽", xp: 485, sellout: 14, x2c: 66, review: 9, streak: 0, status: "under" },
-  { name: "Laila", avatar: "👩🏻", xp: 450, sellout: 12, x2c: 61, review: 8, streak: 0, status: "under" },
+  { name: "Revalina Bahri", avatar: "👩🏽", xp: 600, sellout: 18, x2c: 79, review: 11, streak: 1, status: "underperform" },
+  { name: "Sari Purnama", avatar: "👩🏻", xp: 580, sellout: 17, x2c: 76, review: 10, streak: 1, status: "underperform" },
+  { name: "Rahma", avatar: "👩🏽", xp: 540, sellout: 16, x2c: 72, review: 10, streak: 1, status: "underperform" },
+  { name: "Nadia", avatar: "👩🏻", xp: 515, sellout: 15, x2c: 68, review: 9, streak: 0, status: "underperform" },
+  { name: "Fitri", avatar: "👩🏽", xp: 485, sellout: 14, x2c: 66, review: 9, streak: 0, status: "underperform" },
+  { name: "Laila", avatar: "👩🏻", xp: 450, sellout: 12, x2c: 61, review: 8, streak: 0, status: "underperform" },
 ];
 
 export const missions: Mission[] = [

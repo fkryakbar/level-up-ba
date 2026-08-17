@@ -3,14 +3,24 @@
 import { usePathname } from "next/navigation";
 import { useApp } from "@/components/app-provider";
 import NotificationList from "@/components/notifications/NotificationList";
-import { PAGE_META, PERIODS, PROFILE } from "@/lib/data";
-import type { PeriodKey } from "@/lib/types";
-import { Bell, Menu, Shield } from "lucide-react";
+import { PAGE_META, PROFILE } from "@/lib/data";
+import { Bell, Menu, Trophy } from "lucide-react";
 
 export default function Topbar({ onMenu }: { onMenu: () => void }) {
   const pathname = usePathname();
-  const { period, setPeriod, notifCount, setNotifCount, showToast, openModal } = useApp();
+  const {
+    period,
+    setPeriod,
+    periods,
+    snapshot,
+    isPerformanceLoading,
+    notifCount,
+    setNotifCount,
+    showToast,
+    openModal,
+  } = useApp();
   const meta = PAGE_META[pathname] ?? PAGE_META["/"];
+  const topBa = snapshot?.baData[0];
 
   const openNotifications = () => {
     openModal({
@@ -41,15 +51,17 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           className="period-select"
           aria-label="Pilih periode"
           value={period}
+          disabled={isPerformanceLoading || periods.length === 0}
           onChange={(e) => {
-            const value = e.target.value as PeriodKey;
+            const value = e.target.value;
             setPeriod(value);
             showToast(
               `Dashboard switched to ${e.target.options[e.target.selectedIndex].text}.`
             );
           }}
         >
-          {PERIODS.map((p) => (
+          {periods.length === 0 && <option value="">Memuat spreadsheet…</option>}
+          {periods.map((p) => (
             <option key={p.key} value={p.key}>
               {p.label}
             </option>
@@ -59,9 +71,19 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           <Bell size={16} aria-hidden="true" /> <span>{notifCount}</span>
         </button>
         <div className="pill level-pill">
-          <Shield size={14} aria-hidden="true" /> <b>LV. {PROFILE.level}</b>
-          <br />
-          {PROFILE.title}
+          {topBa ? (
+            <>
+              <Trophy size={14} aria-hidden="true" /> <b>LV. {topBa.level}</b>
+              <br />
+              {topBa.levelName}
+            </>
+          ) : (
+            <>
+              <b>LV. {PROFILE.level}</b>
+              <br />
+              {PROFILE.title}
+            </>
+          )}
         </div>
       </div>
     </header>

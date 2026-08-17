@@ -1,4 +1,6 @@
-export type PeriodKey = "week1" | "week2" | "july4";
+export type PeriodKey = string;
+
+export type Qualification = "underperform" | "perform" | "good_perform" | "unknown";
 
 export interface PeriodData {
   total: number;
@@ -7,6 +9,11 @@ export interface PeriodData {
   sellout: number;
   perform: number;
   under: number;
+  goodPerform?: number;
+  unknown?: number;
+  totalReview?: number;
+  totalX2c?: number;
+  totalSellout?: number;
   labels: string[];
   x2cSeries: number[];
   selloutSeries: number[];
@@ -17,11 +24,20 @@ export interface BaRecord {
   name: string;
   avatar: string;
   xp: number;
-  sellout: number;
-  x2c: number;
-  review: number;
+  sellout: number | null;
+  x2c: number | null;
+  review: number | null;
   streak: number;
-  status: "perform" | "under";
+  status: Qualification;
+}
+
+export interface PerformanceBaRecord extends BaRecord {
+  weeklyXp: number;
+  hasData: boolean;
+  x2cChange: number | null;
+  x2cImprovement: number | null;
+  level: number;
+  levelName: string;
 }
 
 export interface Mission {
@@ -75,6 +91,22 @@ export interface Level {
 export interface PeriodOption {
   key: PeriodKey;
   label: string;
+  month?: string;
+  week?: number;
+}
+
+export interface PerformanceSnapshot {
+  period: PeriodOption;
+  data: PeriodData;
+  baData: PerformanceBaRecord[];
+  achievements: Achievement[];
+}
+
+export interface PerformanceDataset {
+  periods: PeriodOption[];
+  defaultPeriod: PeriodKey;
+  snapshots: Record<PeriodKey, PerformanceSnapshot>;
+  updatedAt: string;
 }
 
 export interface PageMeta {

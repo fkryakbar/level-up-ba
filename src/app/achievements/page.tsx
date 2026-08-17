@@ -1,51 +1,54 @@
 "use client";
 
-import { useRef } from "react";
-import { Plus } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import KpiCard from "@/components/ui/KpiCard";
 import AchievementCard from "@/components/achievements/AchievementCard";
-import AwardForm from "@/components/modals/AwardForm";
 import { useApp } from "@/components/app-provider";
-import { achievements } from "@/lib/data";
 
 export default function AchievementsPage() {
-  const { openModal } = useApp();
-  const submitRef = useRef<(() => void) | null>(null);
+  const { snapshot, isPerformanceLoading, performanceError } = useApp();
+
+  if (isPerformanceLoading) {
+    return <div className="page skeleton"><div className="bars"><div className="row" /><div className="row" /><div className="row" /></div><div className="row" /></div>;
+  }
+
+  if (!snapshot) {
+    return (
+      <div className="page">
+        <PageHeader title="Achievements" subtitle="Achievement yang diturunkan dari data performance." />
+        <div className="card panel empty-state"><span className="empty-icon">⚠️</span><b>Achievement belum tersedia</b>{performanceError}</div>
+      </div>
+    );
+  }
+
+  const leader = snapshot.baData[0];
+  const longestStreak = Math.max(...snapshot.baData.map((record) => record.streak), 0);
+  const mostImproved = [...snapshot.baData]
+    .filter((record) => record.x2cImprovement !== null)
+    .sort((a, b) => (b.x2cImprovement ?? 0) - (a.x2cImprovement ?? 0))[0];
 
   return (
     <div className="page">
       <PageHeader
         title="Achievements"
-        subtitle="Track badges, milestones, and outstanding performance."
-        action={
-          <button
-            className="btn primary"
-            onClick={() =>
-              openModal({
-                title: "Give Achievement",
-                body: <AwardForm submitRef={submitRef} />,
-                confirmText: "Award",
-                onConfirm: () => submitRef.current?.(),
-              })
-            }
-          >
-            <Plus size={16} aria-hidden="true" /> Give Achievement
-          </button>
-        }
+        subtitle={`Achievement yang dihitung dari ${snapshot.period.label}.`}
       />
 
       <div className="grid4">
-        <KpiCard icon="trophy" label="Achievement Issued" value="128" footer="+17 this month" />
-        <KpiCard icon="flame" label="Active Streak" value="18" footer="BA with ≥ 2 week streak" />
-        <KpiCard icon="crown" label="Top Performer" value="Pahriah" footer="1,420 XP" />
-        <KpiCard icon="rocket" label="Most Improved" value="+18%" footer="Norcahyanti" />
+        <KpiCard icon="trophy" label="Achievement Available" value={snapshot.achievements.length} footer="Dihitung dari data periode" />
+        <KpiCard icon="flame" label="Longest Streak" value={`${longestStreak} minggu`} footer="XP sama atau meningkat" />
+        <KpiCard icon="crown" label="Top Performer" value={leader?.name ?? "—"} footer={leader ? `${leader.xp.toLocaleString()} XP • ${leader.levelName}` : "Belum ada data"} />
+        <KpiCard icon="rocket" label="Most Improved" value={mostImproved ? `+${mostImproved.x2cImprovement}` : "—"} footer={mostImproved?.name ?? "Belum ada pembanding"} />
       </div>
 
       <div className="grid-feature">
-        {achievements.map((a) => (
-          <AchievementCard key={a.title} achievement={a} />
-        ))}
+        {snapshot.achievements.length > 0 ? (
+          snapshot.achievements.map((achievement) => (
+            <AchievementCard key={`${achievement.title}-${achievement.owner}`} achievement={achievement} />
+          ))
+        ) : (
+          <div className="card panel empty-state"><span className="empty-icon">🏅</span><b>Belum ada achievement yang memenuhi aturan</b></div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.gitignore
+.env*
+*.md
+Dockerfile
+.dockerignore
+.github
+service-account.json

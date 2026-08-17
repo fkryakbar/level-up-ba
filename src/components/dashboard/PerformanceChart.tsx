@@ -40,7 +40,7 @@ const MAX_VALUE = 150;
 
 function scale(values: number[], max: number): SeriesPoint[] {
   return values.map((v, i) => {
-    const x = X_START + (i * (X_END - X_START)) / (values.length - 1);
+    const x = values.length <= 1 ? (X_START + X_END) / 2 : X_START + (i * (X_END - X_START)) / (values.length - 1);
     const y = Y_BOTTOM - (v / max) * (Y_BOTTOM - Y_TOP);
     return { x, y, v };
   });
@@ -119,7 +119,7 @@ export default function PerformanceChart({ data }: { data: PeriodData }) {
         ))}
 
         {data.labels.map((label, i) => {
-          const x = 50 + (i * 660) / (data.labels.length - 1);
+          const x = data.labels.length <= 1 ? 380 : 50 + (i * 660) / (data.labels.length - 1);
           return (
             <text key={label} className="axis" x={x - 5} y="240">
               {label}

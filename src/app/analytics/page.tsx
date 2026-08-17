@@ -6,43 +6,92 @@ import SparkBars from "@/components/analytics/SparkBars";
 import { useApp } from "@/components/app-provider";
 import { RefreshCw } from "lucide-react";
 
-const METRICS = [
-  { key: "engagement", title: "Team Engagement", big: "84%", tone: "delta", note: "↗ 7.2%", bars: [37, 52, 47, 68, 61, 76, 84] },
-  { key: "mission", title: "Mission Completion", big: "71%", tone: "delta", note: "↗ 4.6%", bars: [45, 50, 54, 61, 57, 67, 71] },
-  { key: "underperform", title: "Underperform Rate", big: "77.5%", tone: "danger", note: "Needs attention", bars: [84, 81, 82, 80, 79, 78, 77] },
-  { key: "avgxp", title: "Avg XP / BA", big: "742", tone: "delta", note: "↗ 11.1%", bars: [43, 46, 49, 55, 59, 66, 74] },
-];
-
-const SEGMENTS = [
-  { label: "Top Performers", value: "15%", width: "15%" },
-  { label: "On Track", value: "7.5%", width: "7.5%" },
-  { label: "Need Attention", value: "77.5%", width: "77.5%" },
-];
-
-const INSIGHTS = [
-  { icon: "alert", title: "Underperform rate is high", text: "31 of 40 BA are currently under target. Prioritize coaching on X2C and sellout." },
-  { icon: "trending-up", title: "X2C trend is improving", text: "Average X2C increased 8.3% from last week." },
-  { icon: "star", title: "Review target opportunity", text: "Review Booster is at 73%; a targeted push can improve mission completion." },
-];
+function toBars(values: number[]): number[] {
+  const maximum = Math.max(...values, 1);
+  return values.map((value) => Math.max(8, Math.round((value / maximum) * 100)));
+}
 
 export default function AnalyticsPage() {
-  const { showToast } = useApp();
+  const {
+    snapshot,
+    isPerformanceLoading,
+    performanceError,
+    refreshPerformance,
+    showToast,
+  } = useApp();
+
+  const refresh = async () => {
+    await refreshPerformance();
+    showToast("Analytics diperbarui dari spreadsheet.");
+  };
+
+  if (isPerformanceLoading) {
+    return <div className="page skeleton"><div className="bars"><div className="row" /><div className="row" /><div className="row" /></div><div className="row" /></div>;
+  }
+
+  if (!snapshot) {
+    return (
+      <div className="page">
+        <PageHeader title="Analytics" subtitle="Analisis berdasarkan spreadsheet." />
+        <div className="card panel empty-state"><span className="empty-icon">⚠️</span><b>Analytics belum tersedia</b>{performanceError}</div>
+      </div>
+    );
+  }
+
+  const { data, baData } = snapshot;
+  const total = Math.max(data.total, 1);
+  const goodRate = ((data.goodPerform ?? 0) / total) * 100;
+  const performOnly = Math.max(data.perform - (data.goodPerform ?? 0), 0);
+  const performRate = (performOnly / total) * 100;
+  const underRate = (data.under / total) * 100;
+  const averageXp = baData.reduce((sum, record) => sum + record.xp, 0) / Math.max(baData.length, 1);
+  const x2cSeries = data.x2cSeries;
+  const x2cDelta = x2cSeries.length >= 2 ? x2cSeries.at(-1)! - x2cSeries.at(-2)! : null;
+  const topXp = baData[0];
+  const metrics = [
+    { key: "good", title: "Good Perform Rate", big: `${goodRate.toFixed(1)}%`, tone: "delta", note: `${data.goodPerform ?? 0} BA`, bars: toBars(data.x2cSeries) },
+    { key: "perform", title: "Perform Rate", big: `${performRate.toFixed(1)}%`, tone: "delta", note: `${performOnly} BA`, bars: toBars(data.reviewSeries) },
+    { key: "underperform", title: "Underperform Rate", big: `${underRate.toFixed(1)}%`, tone: "danger", note: `${data.under} BA`, bars: toBars(data.selloutSeries) },
+    { key: "avgxp", title: "Avg XP / BA", big: averageXp.toFixed(0), tone: "delta", note: "XP kumulatif", bars: toBars(data.x2cSeries) },
+  ];
+  const segments = [
+    { label: "Good Perform", value: goodRate, count: data.goodPerform ?? 0 },
+    { label: "Perform", value: performRate, count: performOnly },
+    { label: "Underperform", value: underRate, count: data.under },
+  ];
+  const insights = [
+    {
+      icon: "alert",
+      title: "Status underperform",
+      text: `${data.under} dari ${data.total} BA memiliki Qualification Underperform pada ${snapshot.period.label}.`,
+    },
+    {
+      icon: "trending-up",
+      title: "Perubahan rata-rata X2C",
+      text: x2cDelta === null ? "Belum ada minggu pembanding pada bulan ini." : `Rata-rata X2C ${x2cDelta >= 0 ? "naik" : "turun"} ${Math.abs(x2cDelta).toFixed(1)} dari minggu sebelumnya.`,
+    },
+    {
+      icon: "trophy",
+      title: "XP tertinggi",
+      text: topXp ? `${topXp.name} memimpin dengan ${topXp.xp.toLocaleString()} XP dan streak ${topXp.streak} minggu.` : "Belum ada data XP.",
+    },
+  ];
 
   return (
     <div className="page">
       <PageHeader
         title="Analytics"
-        subtitle="Deeper team health, conversion, sellout, review, and engagement insights."
-        action={<button className="btn" onClick={() => showToast("Analytics refreshed.")}><RefreshCw size={14} aria-hidden="true" /> Refresh</button>}
+        subtitle={`Analisis ${snapshot.period.label} dari spreadsheet.`}
+        action={<button className="btn" onClick={refresh}><RefreshCw size={14} aria-hidden="true" /> Refresh</button>}
       />
 
       <div className="grid4">
-        {METRICS.map((m) => (
-          <div className="metric-block card" key={m.key}>
-            <h3>{m.title}</h3>
-            <div className="metric-big">{m.big}</div>
-            <span className={m.tone}>{m.note}</span>
-            <SparkBars values={m.bars} />
+        {metrics.map((metric) => (
+          <div className="metric-block card" key={metric.key}>
+            <h3>{metric.title}</h3>
+            <div className="metric-big">{metric.big}</div>
+            <span className={metric.tone}>{metric.note}</span>
+            <SparkBars values={metric.bars} />
           </div>
         ))}
       </div>
@@ -51,15 +100,13 @@ export default function AnalyticsPage() {
         <div className="card panel">
           <h2>Performance segmentation</h2>
           <div style={{ marginTop: 14, display: "grid", gap: 12 }}>
-            {SEGMENTS.map((s) => (
-              <div key={s.label}>
+            {segments.map((segment) => (
+              <div key={segment.label}>
                 <div className="mission-head">
-                  <b>{s.label}</b>
-                  <b>{s.value}</b>
+                  <b>{segment.label}</b>
+                  <b>{segment.count} BA • {segment.value.toFixed(1)}%</b>
                 </div>
-                <div className="progress">
-                  <i style={{ width: s.width }} />
-                </div>
+                <div className="progress"><i style={{ width: `${segment.value}%` }} /></div>
               </div>
             ))}
           </div>
@@ -68,15 +115,10 @@ export default function AnalyticsPage() {
         <div className="card panel">
           <h2>Actionable insights</h2>
           <div className="notification-list" style={{ marginTop: 12 }}>
-            {INSIGHTS.map((ins) => (
-              <div className="notification-item" key={ins.title}>
-                <div className="notification-icon">
-                <Icon name={ins.icon} size={16} />
-              </div>
-                <div>
-                  <b>{ins.title}</b>
-                  <p>{ins.text}</p>
-                </div>
+            {insights.map((insight) => (
+              <div className="notification-item" key={insight.title}>
+                <div className="notification-icon"><Icon name={insight.icon} size={16} /></div>
+                <div><b>{insight.title}</b><p>{insight.text}</p></div>
               </div>
             ))}
           </div>

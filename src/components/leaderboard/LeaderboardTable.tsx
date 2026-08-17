@@ -2,16 +2,16 @@
 
 import { useMemo, useState } from "react";
 import { Flame, Search } from "lucide-react";
-import { baData } from "@/lib/data";
 import { initials } from "@/lib/initials";
 import { useApp } from "@/components/app-provider";
 import StatusBadge from "@/components/ui/StatusBadge";
 
-type Filter = "all" | "perform" | "under";
+type Filter = "all" | "good" | "perform" | "under";
 type SortKey = "xp" | "sellout" | "x2c" | "review";
 
 const FILTERS: { key: Filter; label: string }[] = [
   { key: "all", label: "All" },
+  { key: "good", label: "Good Perform" },
   { key: "perform", label: "Perform" },
   { key: "under", label: "Underperform" },
 ];
@@ -24,7 +24,7 @@ const SORTABLE: { key: SortKey; label: string }[] = [
 ];
 
 export default function LeaderboardTable() {
-  const { showToast } = useApp();
+  const { showToast, snapshot, isPerformanceLoading, performanceError } = useApp();
   const [filter, setFilter] = useState<Filter>("all");
   const [term, setTerm] = useState("");
   const [sort, setSort] = useState<{ key: SortKey; dir: "asc" | "desc" }>({
@@ -33,16 +33,18 @@ export default function LeaderboardTable() {
   });
 
   const rows = useMemo(() => {
-    let data = [...baData];
-    if (filter !== "all") data = data.filter((x) => x.status === filter);
+    let data = [...(snapshot?.baData ?? [])];
+    if (filter === "good") data = data.filter((x) => x.status === "good_perform");
+    if (filter === "perform") data = data.filter((x) => x.status === "perform");
+    if (filter === "under") data = data.filter((x) => x.status === "underperform");
     if (term) data = data.filter((x) => x.name.toLowerCase().includes(term.toLowerCase()));
     data.sort((a, b) => {
-      const av = a[sort.key];
-      const bv = b[sort.key];
+      const av = a[sort.key] ?? -Infinity;
+      const bv = b[sort.key] ?? -Infinity;
       return sort.dir === "asc" ? av - bv : bv - av;
     });
     return data;
-  }, [filter, term, sort]);
+  }, [filter, snapshot?.baData, term, sort]);
 
   const toggleSort = (key: SortKey) => {
     setSort((prev) =>
@@ -67,6 +69,14 @@ export default function LeaderboardTable() {
     URL.revokeObjectURL(url);
     showToast("Leaderboard exported to CSV.");
   };
+
+  if (isPerformanceLoading) {
+    return <div className="card panel skeleton" aria-label="Memuat leaderboard"><div className="bar" /><div className="row" /></div>;
+  }
+
+  if (!snapshot) {
+    return <div className="card panel empty-state"><span className="empty-icon">⚠️</span><b>Leaderboard belum tersedia</b>{performanceError}</div>;
+  }
 
   return (
     <div className="card panel">
@@ -148,9 +158,9 @@ export default function LeaderboardTable() {
                   <td style={{ color: "var(--accent)", fontWeight: 800 }}>
                     {user.xp.toLocaleString()}
                   </td>
-                  <td>{user.sellout}%</td>
-                  <td>{user.x2c}</td>
-                  <td>{user.review}</td>
+                  <td>{user.sellout === null ? "—" : `${user.sellout}%`}</td>
+                  <td>{user.x2c ?? "—"}</td>
+                  <td>{user.review ?? "—"}</td>
                   <td>
                     {user.streak ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>

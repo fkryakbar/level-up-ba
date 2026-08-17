@@ -9,26 +9,50 @@ import Podium from "@/components/dashboard/Podium";
 import TeamLevelProgress from "@/components/dashboard/TeamLevelProgress";
 import MissionItem from "@/components/missions/MissionItem";
 import AchievementRow from "@/components/achievements/AchievementRow";
-import { achievements, datasets, missions } from "@/lib/data";
+import { missions } from "@/lib/data";
 import { ArrowRight } from "lucide-react";
 
 export default function DashboardPage() {
-  const { period } = useApp();
-  const data = datasets[period];
+  const { snapshot, isPerformanceLoading, performanceError } = useApp();
+
+  if (isPerformanceLoading) {
+    return (
+      <div className="page skeleton" aria-label="Memuat data spreadsheet">
+        <div className="bars"><div className="row" /><div className="row" /><div className="row" /></div>
+        <div className="row" />
+      </div>
+    );
+  }
+
+  if (!snapshot) {
+    return (
+      <div className="page">
+        <div className="card panel empty-state">
+          <span className="empty-icon">⚠️</span>
+          <b>Data spreadsheet belum tersedia</b>
+          {performanceError ?? "Pilih periode setelah koneksi spreadsheet berhasil."}
+        </div>
+      </div>
+    );
+  }
+
+  const { data, achievements } = snapshot;
+  const performanceRate = data.total ? Math.round((data.perform / data.total) * 100) : 0;
+  const underperformRate = data.total ? Math.round((data.under / data.total) * 100) : 0;
 
   return (
     <div className="page">
       <section className="grid6">
-        <KpiCard icon="users" label="Total BA" value={data.total} footer="Active Member" />
-        <KpiCard icon="star" label="Avg Rating Review" value={data.review} footer="↗ 5.6% vs Last Week" />
-        <KpiCard icon="shopping-cart" label="Avg X2C" value={data.x2c} footer="↗ 8.3% vs Last Week" />
-        <KpiCard icon="shopping-bag" label="Avg Sellout" value={`${data.sellout}%`} footer="↗ 4.1% vs Last Week" />
-        <KpiCard icon="dumbbell" label="BA Perform" value={data.perform} footer="15% of Total BA" />
+        <KpiCard icon="users" label="Total BA" value={data.total} footer="Nama BA pada periode ini" />
+        <KpiCard icon="star" label="Avg Rating Review" value={data.review.toFixed(1)} footer="Rata-rata data tersedia" />
+        <KpiCard icon="shopping-cart" label="Avg X2C" value={data.x2c.toFixed(1)} footer="Rata-rata data tersedia" />
+        <KpiCard icon="shopping-bag" label="Avg Sellout" value={`${data.sellout.toFixed(1)}%`} footer="Rata-rata data tersedia" />
+        <KpiCard icon="dumbbell" label="BA Perform" value={data.perform} footer={`${data.goodPerform ?? 0} Good Perform • ${performanceRate}%`} />
         <KpiCard
           icon="alert"
           label="BA Underperform"
           value={data.under}
-          footer="77.5% of Total BA"
+          footer={`${underperformRate}% dari total BA`}
           tone="danger"
         />
       </section>
@@ -52,24 +76,24 @@ export default function DashboardPage() {
           <div className="summary">
             <div className="mini">
               <small><Icon name="shopping-bag" size={13} className="inline-icon" /> Total Sellout</small>
-              <strong>216%</strong>
-              <span className="delta">↗ 21% vs LW</span>
+              <strong>{data.totalSellout?.toFixed(1) ?? "0"}%</strong>
+              <span className="sub">Akumulasi periode terpilih</span>
             </div>
             <div className="mini">
               <small><Icon name="shopping-cart" size={13} className="inline-icon" /> Total X2C</small>
-              <strong>3,144</strong>
-              <span className="delta">↗ 12% vs LW</span>
+              <strong>{data.totalX2c?.toLocaleString() ?? "0"}</strong>
+              <span className="sub">Akumulasi periode terpilih</span>
             </div>
             <div className="mini">
               <small><Icon name="star" size={13} className="inline-icon" /> Total Rating Review</small>
-              <strong>448</strong>
-              <span className="delta">↗ 9% vs LW</span>
+              <strong>{data.totalReview?.toLocaleString() ?? "0"}</strong>
+              <span className="sub">Akumulasi periode terpilih</span>
             </div>
             <div className="mini">
-              <small><Icon name="target" size={13} className="inline-icon" /> Target Sellout</small>
-              <strong>21.6%</strong>
+              <small><Icon name="target" size={13} className="inline-icon" /> Good Perform</small>
+              <strong>{data.goodPerform ?? 0} BA</strong>
               <div className="progress" style={{ marginTop: 5 }}>
-                <i style={{ width: "84%" }} />
+                <i style={{ width: `${data.total ? ((data.goodPerform ?? 0) / data.total) * 100 : 0}%` }} />
               </div>
             </div>
           </div>
@@ -104,9 +128,11 @@ export default function DashboardPage() {
             View All <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
-        {achievements.slice(0, 4).map((a) => (
-          <AchievementRow key={a.title} achievement={a} />
-        ))}
+        {achievements.length > 0 ? (
+          achievements.slice(0, 4).map((a) => <AchievementRow key={`${a.title}-${a.owner}`} achievement={a} />)
+        ) : (
+          <p className="sub">Belum ada achievement yang dapat dihitung pada periode ini.</p>
+        )}
       </section>
     </div>
   );

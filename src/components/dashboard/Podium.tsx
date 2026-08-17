@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { baData } from "@/lib/data";
 import { initials } from "@/lib/initials";
+import { useApp } from "@/components/app-provider";
 
 const ORDER = [1, 0, 2];
 const MEDAL_EMOJIS = ["🥈", "🥇", "🥉"];
 
 export default function Podium() {
+  const { snapshot } = useApp();
+  const baData = snapshot?.baData ?? [];
+  const podiumUsers = ORDER.map((index) => baData[index]).filter(Boolean);
+
   return (
     <div className="card panel leaderboard">
       <div className="toolbar">
@@ -19,8 +23,7 @@ export default function Podium() {
       </div>
 
       <div className="podium">
-        {ORDER.map((i, pos) => {
-          const user = baData[i];
+        {podiumUsers.map((user, pos) => {
           return (
             <div className={`person${pos === 1 ? " first" : ""}`} key={user.name}>
               <div className="medal" aria-hidden="true">
