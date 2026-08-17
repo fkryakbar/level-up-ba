@@ -1,3 +1,4 @@
+import Icon from "@/components/ui/Icon";
 import type { Mission } from "@/lib/types";
 
 export default function MissionItem({
@@ -14,9 +15,9 @@ export default function MissionItem({
     <div className="mission">
       <div className="mission-head">
         <b>
-          {mission.icon} {mission.title}
+          <Icon name={mission.icon} size={16} className="inline-icon" /> {mission.title}
         </b>
-        <b style={{ color: done ? "var(--green)" : "var(--yellow)" }}>
+        <b style={{ color: done ? "var(--good)" : "var(--gold)" }}>
           {mission.current}
           {mission.unit}/{mission.target}
           {mission.unit}

@@ -73,65 +73,67 @@ export const baData: BaRecord[] = [
 ];
 
 export const missions: Mission[] = [
-  { icon: "🎯", title: "Conversion Hunter", desc: "Achieve X2C ≥ 80 this week", current: 78, target: 80, unit: "", reward: 100 },
-  { icon: "⭐", title: "Review Booster", desc: "Achieve Rating Review ≥ 15", current: 11, target: 15, unit: "", reward: 80 },
-  { icon: "🛍", title: "Sales Booster", desc: "Achieve Sellout ≥ 20%", current: 18, target: 20, unit: "%", reward: 100 },
-  { icon: "🔥", title: "Consistency Streak", desc: "Hit all minimum metrics for 3 consecutive days", current: 2, target: 3, unit: " days", reward: 120 },
-  { icon: "🚀", title: "Growth Sprint", desc: "Improve overall score by at least 10%", current: 7, target: 10, unit: "%", reward: 100 },
-  { icon: "🤝", title: "Team Player", desc: "Complete 5 coaching check-ins", current: 3, target: 5, unit: "", reward: 60 },
+  { icon: "target", title: "Conversion Hunter", desc: "Achieve X2C ≥ 80 this week", current: 78, target: 80, unit: "", reward: 100 },
+  { icon: "star", title: "Review Booster", desc: "Achieve Rating Review ≥ 15", current: 11, target: 15, unit: "", reward: 80 },
+  { icon: "shopping-bag", title: "Sales Booster", desc: "Achieve Sellout ≥ 20%", current: 18, target: 20, unit: "%", reward: 100 },
+  { icon: "flame", title: "Consistency Streak", desc: "Hit all minimum metrics for 3 consecutive days", current: 2, target: 3, unit: " days", reward: 120 },
+  { icon: "rocket", title: "Growth Sprint", desc: "Improve overall score by at least 10%", current: 7, target: 10, unit: "%", reward: 100 },
+  { icon: "handshake", title: "Team Player", desc: "Complete 5 coaching check-ins", current: 3, target: 5, unit: "", reward: 60 },
 ];
 
 export const achievements: Achievement[] = [
-  { icon: "🏆", title: "Top Performer", owner: "Pahriah", desc: "Achieved Sellout 38% this week!", time: "2h ago" },
-  { icon: "🔥", title: "Consistency King", owner: "Saudah", desc: "Consistent performance for 2 weeks!", time: "4h ago" },
-  { icon: "🎯", title: "X2C Master", owner: "Maulida", desc: "Achieved X2C 105 this week!", time: "6h ago" },
-  { icon: "🚀", title: "Improvement Star", owner: "Norcahyanti", desc: "Improvement +10% from last week!", time: "1d ago" },
-  { icon: "⭐", title: "Review Champion", owner: "Alya", desc: "Maintained strong customer review output.", time: "2d ago" },
-  { icon: "🤝", title: "Team Supporter", owner: "Nor Allinda", desc: "Completed all coaching check-ins.", time: "3d ago" },
+  { icon: "trophy", title: "Top Performer", owner: "Pahriah", desc: "Achieved Sellout 38% this week", time: "2h ago" },
+  { icon: "flame", title: "Consistency King", owner: "Saudah", desc: "Consistent performance for 2 weeks", time: "4h ago" },
+  { icon: "target", title: "X2C Master", owner: "Maulida", desc: "Achieved X2C 105 this week", time: "6h ago" },
+  { icon: "rocket", title: "Improvement Star", owner: "Norcahyanti", desc: "Improvement +10% from last week", time: "1d ago" },
+  { icon: "star", title: "Review Champion", owner: "Alya", desc: "Maintained strong customer review output", time: "2d ago" },
+  { icon: "handshake", title: "Team Supporter", owner: "Nor Allinda", desc: "Completed all coaching check-ins", time: "3d ago" },
 ];
 
 export const rewards: Reward[] = [
-  { icon: "☕", title: "Coffee Voucher", desc: "Redeem a beverage voucher from selected merchants.", cost: 300, stock: 12 },
-  { icon: "🍱", title: "Meal Voucher", desc: "Lunch voucher for high-performing BA.", cost: 500, stock: 8 },
-  { icon: "🎟️", title: "Entertainment Ticket", desc: "Movie or recreation voucher.", cost: 700, stock: 4 },
-  { icon: "🛍️", title: "Shopping Voucher", desc: "Shopping voucher worth Rp100.000.", cost: 900, stock: 5 },
-  { icon: "🎁", title: "Mystery Box", desc: "Random merchandise and surprise rewards.", cost: 1000, stock: 3 },
-  { icon: "🏖️", title: "Extra Day Off", desc: "One additional approved leave day.", cost: 1800, stock: 2 },
+  { icon: "coffee", title: "Coffee Voucher", desc: "Redeem a beverage voucher from selected merchants.", cost: 300, stock: 12 },
+  { icon: "utensils", title: "Meal Voucher", desc: "Lunch voucher for high-performing BA.", cost: 500, stock: 8 },
+  { icon: "ticket", title: "Entertainment Ticket", desc: "Movie or recreation voucher.", cost: 700, stock: 4 },
+  { icon: "shopping-bag", title: "Shopping Voucher", desc: "Shopping voucher worth Rp100.000.", cost: 900, stock: 5 },
+  { icon: "gift", title: "Mystery Box", desc: "Random merchandise and surprise rewards.", cost: 1000, stock: 3 },
+  { icon: "sun", title: "Extra Day Off", desc: "One additional approved leave day.", cost: 1800, stock: 2 },
 ];
 
 export const historyItems: HistoryItem[] = [
-  { type: "xp", icon: "✨", title: "Pahriah earned +100 XP", text: "Completed Sales Booster mission.", time: "Today, 13:20" },
-  { type: "mission", icon: "🎯", title: "Conversion Hunter reached 97%", text: "Team X2C progress is now 78/80.", time: "Today, 11:40" },
-  { type: "reward", icon: "🎁", title: "Saudah redeemed Coffee Voucher", text: "300 XP deducted from reward balance.", time: "Today, 09:15" },
-  { type: "xp", icon: "🔥", title: "Maulida received +50 XP", text: "Weekly consistency bonus.", time: "Yesterday, 16:30" },
-  { type: "mission", icon: "⭐", title: "Review Booster updated", text: "Current progress 11/15.", time: "Yesterday, 14:10" },
-  { type: "reward", icon: "🍱", title: "Norcahyanti redeemed Meal Voucher", text: "500 XP redeemed successfully.", time: "12 Aug 2026" },
+  { type: "xp", icon: "sparkles", title: "Pahriah earned +100 XP", text: "Completed Sales Booster mission.", time: "Today, 13:20" },
+  { type: "mission", icon: "target", title: "Conversion Hunter reached 97%", text: "Team X2C progress is now 78/80.", time: "Today, 11:40" },
+  { type: "reward", icon: "gift", title: "Saudah redeemed Coffee Voucher", text: "300 XP deducted from reward balance.", time: "Today, 09:15" },
+  { type: "xp", icon: "flame", title: "Maulida received +50 XP", text: "Weekly consistency bonus.", time: "Yesterday, 16:30" },
+  { type: "mission", icon: "star", title: "Review Booster updated", text: "Current progress 11/15.", time: "Yesterday, 14:10" },
+  { type: "reward", icon: "utensils", title: "Norcahyanti redeemed Meal Voucher", text: "500 XP redeemed successfully.", time: "12 Aug 2026" },
 ];
 
 export const notifications: Notification[] = [
-  { icon: "⚠️", title: "31 BA need attention", text: "Underperform rate is currently 77.5%.", unread: true },
-  { icon: "🎯", title: "Mission almost complete", text: "Conversion Hunter is at 97%.", unread: true },
-  { icon: "🏆", title: "New top performer", text: "Pahriah reached 1,420 XP.", unread: true },
-  { icon: "📅", title: "Weekly review scheduled", text: "Performance review is due Monday.", unread: false },
+  { icon: "alert", title: "31 BA need attention", text: "Underperform rate is currently 77.5%.", unread: true },
+  { icon: "target", title: "Mission almost complete", text: "Conversion Hunter is at 97%.", unread: true },
+  { icon: "trophy", title: "New top performer", text: "Pahriah reached 1,420 XP.", unread: true },
+  { icon: "calendar", title: "Weekly review scheduled", text: "Performance review is due Monday.", unread: false },
 ];
 
 export const LEVELS: Level[] = [
-  { icon: "🌱", num: "Lv.1", name: "Rookie", reached: true },
-  { icon: "⚡", num: "Lv.2", name: "Rising Star", reached: true },
-  { icon: "⭐", num: "Lv.3", name: "Performer", reached: true },
-  { icon: "🛡️", num: "Lv.4", name: "Superstar", reached: true },
-  { icon: "👑", num: "Lv.5", name: "Legend", reached: false },
+  { icon: "sprout", num: "Lv.1", name: "Rookie", reached: true },
+  { icon: "zap", num: "Lv.2", name: "Rising Star", reached: true },
+  { icon: "star", num: "Lv.3", name: "Performer", reached: true },
+  { icon: "shield", num: "Lv.4", name: "Superstar", reached: true },
+  { icon: "crown", num: "Lv.5", name: "Legend", reached: false },
 ];
 
 export const PAGE_META: Record<string, PageMeta> = {
-  "/": { title: "Good afternoon, Hanna! 👋", subtitle: "Keep the momentum and level up your team performance!" },
-  "/achievements": { title: "Achievements 🏅", subtitle: "Celebrate milestones and recognize outstanding performance." },
-  "/missions": { title: "Missions 🎯", subtitle: "Focus the team on clear weekly performance targets." },
-  "/rewards": { title: "Rewards Store 🎁", subtitle: "Turn performance and consistency into meaningful rewards." },
-  "/leaderboard": { title: "Leaderboard 🏆", subtitle: "See where every Brand Ambassador stands this week." },
-  "/history": { title: "History ◷", subtitle: "Review gamification and performance activity." },
-  "/analytics": { title: "Analytics ▥", subtitle: "Turn performance data into coaching priorities." },
-  "/settings": { title: "Settings ⚙", subtitle: "Configure the Level Up BA experience." },
+  "/": { title: "Good afternoon, Hanna", subtitle: "Keep the momentum and level up your team performance" },
+  "/achievements": { title: "Achievements", subtitle: "Celebrate milestones and recognize outstanding performance." },
+  "/missions": { title: "Missions", subtitle: "Focus the team on clear weekly performance targets." },
+  "/rewards": { title: "Rewards Store", subtitle: "Turn performance and consistency into meaningful rewards." },
+  "/leaderboard": { title: "Leaderboard", subtitle: "See where every Brand Ambassador stands this week." },
+  "/history": { title: "History", subtitle: "Review gamification and performance activity." },
+  "/analytics": { title: "Analytics", subtitle: "Turn performance data into coaching priorities." },
+  "/settings": { title: "Settings", subtitle: "Configure the Level Up BA experience." },
+  "/privacy": { title: "Privacy policy", subtitle: "How Level Up BA handles your data." },
+  "/terms": { title: "Terms of service", subtitle: "The rules that keep the program fair." },
 };
 
 export const PROFILE = {

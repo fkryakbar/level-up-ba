@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
+import { X } from "lucide-react";
 
 interface ModalProps {
   title: string;
@@ -11,9 +13,18 @@ interface ModalProps {
 }
 
 export default function Modal({ title, confirmText, onClose, onConfirm, children }: ModalProps) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+  }, []);
+
   return (
     <div
       className="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -21,8 +32,8 @@ export default function Modal({ title, confirmText, onClose, onConfirm, children
       <div className="modal">
         <div className="modal-head">
           <h3>{title}</h3>
-          <button className="btn" onClick={onClose} aria-label="Close modal">
-            ✕
+          <button ref={closeRef} className="btn" onClick={onClose} aria-label="Close modal">
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
         <div className="modal-body">{children}</div>

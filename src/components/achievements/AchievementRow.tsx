@@ -1,9 +1,12 @@
+import Icon from "@/components/ui/Icon";
 import type { Achievement } from "@/lib/types";
 
 export default function AchievementRow({ achievement }: { achievement: Achievement }) {
   return (
     <div className="achievement">
-      <div className="icon">{achievement.icon}</div>
+      <div className="icon">
+        <Icon name={achievement.icon} size={16} />
+      </div>
       <div>
         <b>
           {achievement.owner} earned {achievement.title}

@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Flame, Search } from "lucide-react";
 import { baData } from "@/lib/data";
+import { initials } from "@/lib/initials";
 import { useApp } from "@/components/app-provider";
 import StatusBadge from "@/components/ui/StatusBadge";
 
@@ -110,8 +112,25 @@ export default function LeaderboardTable() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={8} style={{ textAlign: "center", color: "var(--muted)" }}>
-                  No BA found.
+                <td colSpan={8}>
+                  <div className="empty-state">
+                    <span className="empty-icon">
+                      <Search size={30} />
+                    </span>
+                    <b>No BA match your filters</b>
+                    Try clearing the search or switching to a different status.
+                    <div style={{ marginTop: 14 }}>
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          setTerm("");
+                          setFilter("all");
+                        }}
+                      >
+                        Reset filters
+                      </button>
+                    </div>
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -122,17 +141,26 @@ export default function LeaderboardTable() {
                   </td>
                   <td>
                     <div className="usercell">
-                      <span className="miniavatar">{user.avatar}</span>
+                      <span className="miniavatar">{initials(user.name)}</span>
                       <b>{user.name}</b>
                     </div>
                   </td>
-                  <td style={{ color: "var(--teal)", fontWeight: 800 }}>
+                  <td style={{ color: "var(--accent)", fontWeight: 800 }}>
                     {user.xp.toLocaleString()}
                   </td>
                   <td>{user.sellout}%</td>
                   <td>{user.x2c}</td>
                   <td>{user.review}</td>
-                  <td>{user.streak ? "🔥".repeat(Math.min(user.streak, 3)) + user.streak : "—"}</td>
+                  <td>
+                    {user.streak ? (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+                        <Flame size={14} color="var(--gold)" aria-hidden="true" />
+                        {user.streak}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td>
                     <StatusBadge status={user.status} />
                   </td>

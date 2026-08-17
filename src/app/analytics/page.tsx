@@ -1,8 +1,10 @@
 "use client";
 
 import PageHeader from "@/components/ui/PageHeader";
+import Icon from "@/components/ui/Icon";
 import SparkBars from "@/components/analytics/SparkBars";
 import { useApp } from "@/components/app-provider";
+import { RefreshCw } from "lucide-react";
 
 const METRICS = [
   { key: "engagement", title: "Team Engagement", big: "84%", tone: "delta", note: "↗ 7.2%", bars: [37, 52, 47, 68, 61, 76, 84] },
@@ -18,9 +20,9 @@ const SEGMENTS = [
 ];
 
 const INSIGHTS = [
-  { icon: "⚠️", title: "Underperform rate is high", text: "31 of 40 BA are currently under target. Prioritize coaching on X2C and sellout." },
-  { icon: "📈", title: "X2C trend is improving", text: "Average X2C increased 8.3% from last week." },
-  { icon: "⭐", title: "Review target opportunity", text: "Review Booster is at 73%; a targeted push can improve mission completion." },
+  { icon: "alert", title: "Underperform rate is high", text: "31 of 40 BA are currently under target. Prioritize coaching on X2C and sellout." },
+  { icon: "trending-up", title: "X2C trend is improving", text: "Average X2C increased 8.3% from last week." },
+  { icon: "star", title: "Review target opportunity", text: "Review Booster is at 73%; a targeted push can improve mission completion." },
 ];
 
 export default function AnalyticsPage() {
@@ -31,7 +33,7 @@ export default function AnalyticsPage() {
       <PageHeader
         title="Analytics"
         subtitle="Deeper team health, conversion, sellout, review, and engagement insights."
-        action={<button className="btn" onClick={() => showToast("Analytics refreshed.")}>↻ Refresh</button>}
+        action={<button className="btn" onClick={() => showToast("Analytics refreshed.")}><RefreshCw size={14} aria-hidden="true" /> Refresh</button>}
       />
 
       <div className="grid4">
@@ -47,7 +49,7 @@ export default function AnalyticsPage() {
 
       <div className="grid2">
         <div className="card panel">
-          <h2>PERFORMANCE SEGMENTATION</h2>
+          <h2>Performance segmentation</h2>
           <div style={{ marginTop: 14, display: "grid", gap: 12 }}>
             {SEGMENTS.map((s) => (
               <div key={s.label}>
@@ -64,11 +66,13 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card panel">
-          <h2>ACTIONABLE INSIGHTS</h2>
+          <h2>Actionable insights</h2>
           <div className="notification-list" style={{ marginTop: 12 }}>
             {INSIGHTS.map((ins) => (
               <div className="notification-item" key={ins.title}>
-                <div className="notification-icon">{ins.icon}</div>
+                <div className="notification-icon">
+                <Icon name={ins.icon} size={16} />
+              </div>
                 <div>
                   <b>{ins.title}</b>
                   <p>{ins.text}</p>

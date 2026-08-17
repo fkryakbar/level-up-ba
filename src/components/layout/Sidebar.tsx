@@ -3,16 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PROFILE } from "@/lib/data";
+import { initials } from "@/lib/initials";
+import {
+  Award,
+  BarChart3,
+  Gift,
+  History,
+  LayoutDashboard,
+  Settings,
+  Target,
+  Trophy,
+  Zap,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-const NAV = [
-  { href: "/", icon: "⌂", label: "Dashboard" },
-  { href: "/achievements", icon: "🏅", label: "Achievements" },
-  { href: "/missions", icon: "🎯", label: "Missions" },
-  { href: "/rewards", icon: "🎁", label: "Rewards Store" },
-  { href: "/leaderboard", icon: "🏆", label: "Leaderboard" },
-  { href: "/history", icon: "◷", label: "History" },
-  { href: "/analytics", icon: "▥", label: "Analytics" },
-  { href: "/settings", icon: "⚙", label: "Settings" },
+const NAV: { href: string; icon: LucideIcon; label: string }[] = [
+  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/achievements", icon: Award, label: "Achievements" },
+  { href: "/missions", icon: Target, label: "Missions" },
+  { href: "/rewards", icon: Gift, label: "Rewards Store" },
+  { href: "/leaderboard", icon: Trophy, label: "Leaderboard" },
+  { href: "/history", icon: History, label: "History" },
+  { href: "/analytics", icon: BarChart3, label: "Analytics" },
+  { href: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigate: () => void }) {
@@ -21,13 +34,14 @@ export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigat
   return (
     <aside className={`sidebar${open ? " open" : ""}`}>
       <div className="logo">
-        LEVEL <span>UP</span> <b>☆</b>
-        <div className="tag">PLAY • PERFORM • PROGRESS</div>
+        LEVEL <span>UP</span> <b className="logo-icon"><Zap size={18} fill="currentColor" aria-hidden="true" /></b>
+        <div className="tag">Play · Perform · Progress</div>
       </div>
 
       <nav className="nav">
         {NAV.map((item) => {
           const active = pathname === item.href;
+          const NavIcon = item.icon;
           return (
             <Link
               key={item.href}
@@ -35,7 +49,9 @@ export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigat
               className={active ? "active" : undefined}
               onClick={onNavigate}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon">
+                <NavIcon size={16} aria-hidden="true" />
+              </span>
               {item.label}
             </Link>
           );
@@ -43,7 +59,7 @@ export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigat
       </nav>
 
       <div className="profile">
-        <div className="avatar">👩🏻</div>
+        <div className="avatar">{initials(PROFILE.name)}</div>
         <b>{PROFILE.name}</b>
         <br />
         <small>{PROFILE.role}</small>

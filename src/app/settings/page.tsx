@@ -22,7 +22,7 @@ export default function SettingsPage() {
 
       <div className="settings-grid">
         <div className="card panel">
-          <h2>PROFILE</h2>
+          <h2>Profile</h2>
           <div className="divider" />
           <div style={{ display: "grid", gap: 11 }}>
             <div className="input-group">
@@ -49,7 +49,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="card panel">
-          <h2>NOTIFICATIONS</h2>
+          <h2>Notifications</h2>
           <div className="divider" />
           <div className="setting-row">
             <div>
@@ -82,7 +82,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="card panel">
-          <h2>PERFORMANCE THRESHOLD</h2>
+          <h2>Performance threshold</h2>
           <div className="divider" />
           <div style={{ display: "grid", gap: 11 }}>
             <div className="input-group">
@@ -101,7 +101,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="card panel">
-          <h2>XP RULES</h2>
+          <h2>XP rules</h2>
           <div className="divider" />
           <div style={{ display: "grid", gap: 11 }}>
             <div className="input-group">

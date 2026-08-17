@@ -57,7 +57,7 @@ export default function PerformanceChart({ data }: { data: PeriodData }) {
     {
       key: "x2c",
       points: scale(data.x2cSeries, MAX_VALUE),
-      color: "#35d7ce",
+      color: "#3ee0cf",
       name: "X2C",
       values: data.x2cSeries,
       suffix: "",
@@ -65,7 +65,7 @@ export default function PerformanceChart({ data }: { data: PeriodData }) {
     {
       key: "sellout",
       points: scale(selloutScaled, MAX_VALUE),
-      color: "#ffd34d",
+      color: "#ffcf5c",
       name: "Sellout",
       values: data.selloutSeries,
       suffix: "%",
@@ -73,7 +73,7 @@ export default function PerformanceChart({ data }: { data: PeriodData }) {
     {
       key: "review",
       points: scale(reviewScaled, MAX_VALUE),
-      color: "#a874ff",
+      color: "#1f8f86",
       dash: "7 6",
       name: "Rating Review",
       values: data.reviewSeries,

@@ -81,7 +81,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           {modal.body}
         </Modal>
       )}
-      <div className={`toast${toast ? " show" : ""}`}>{toast ?? ""}</div>
+      <div
+        className={`toast${toast ? " show" : ""}`}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {toast ?? ""}
+      </div>
     </AppContext.Provider>
   );
 }

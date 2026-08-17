@@ -13,29 +13,37 @@ export default function NewMissionForm({
   const [desc, setDesc] = useState("");
   const [target, setTarget] = useState(100);
   const [reward, setReward] = useState(100);
+  const [errors, setErrors] = useState<{ name?: string; target?: string }>({});
 
   useEffect(() => {
     submitRef.current = () => {
-      const trimmed = name.trim();
-      if (trimmed) showToast(`Mission "${trimmed}" created.`);
-      else showToast("Mission created.");
+      const next: { name?: string; target?: string } = {};
+      if (!name.trim()) next.name = "Mission name is required.";
+      if (!target || target <= 0) next.target = "Target must be greater than 0.";
+      setErrors(next);
+      if (Object.keys(next).length > 0) return;
+      showToast(`Mission "${name.trim()}" created.`);
     };
-  }, [name, showToast, submitRef]);
+  }, [name, target, showToast, submitRef]);
 
   return (
     <div style={{ display: "grid", gap: 11 }}>
       <div className="input-group">
-        <label>Mission name</label>
+        <label htmlFor="mission-name">Mission name</label>
         <input
-          className="input"
+          id="mission-name"
+          className={`input${errors.name ? " invalid" : ""}`}
           placeholder="Example: Weekend Booster"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          aria-invalid={!!errors.name}
         />
+        {errors.name && <span className="form-error">{errors.name}</span>}
       </div>
       <div className="input-group">
-        <label>Description</label>
+        <label htmlFor="mission-desc">Description</label>
         <input
+          id="mission-desc"
           className="input"
           placeholder="Mission objective"
           value={desc}
@@ -44,17 +52,21 @@ export default function NewMissionForm({
       </div>
       <div className="grid2" style={{ margin: 0 }}>
         <div className="input-group">
-          <label>Target</label>
+          <label htmlFor="mission-target">Target</label>
           <input
-            className="input"
+            id="mission-target"
+            className={`input${errors.target ? " invalid" : ""}`}
             type="number"
             value={target}
             onChange={(e) => setTarget(Number(e.target.value))}
+            aria-invalid={!!errors.target}
           />
+          {errors.target && <span className="form-error">{errors.target}</span>}
         </div>
         <div className="input-group">
-          <label>Reward XP</label>
+          <label htmlFor="mission-reward">Reward XP</label>
           <input
+            id="mission-reward"
             className="input"
             type="number"
             value={reward}

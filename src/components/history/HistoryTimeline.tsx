@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Icon from "@/components/ui/Icon";
 import { historyItems } from "@/lib/data";
 
 type Filter = "all" | "xp" | "mission" | "reward";
@@ -13,7 +14,7 @@ export default function HistoryTimeline() {
   return (
     <div className="card panel">
       <div className="toolbar">
-        <h2>Recent Activity</h2>
+        <h2>Recent activity</h2>
         <select
           className="input"
           style={{ width: "auto" }}
@@ -27,17 +28,27 @@ export default function HistoryTimeline() {
         </select>
       </div>
       <div className="timeline">
-        {items.map((item) => (
-          <div className="timeline-item" key={item.title}>
-            <div className="timeline-dot" />
-            <h4>
-              {item.icon} {item.title}
-            </h4>
-            <p>
-              {item.text} • {item.time}
-            </p>
+        {items.length === 0 ? (
+          <div className="empty-state">
+            <span className="empty-icon">
+              <Icon name="inbox" size={30} />
+            </span>
+            <b>No activity in this category</b>
+            Try a different filter to see more events.
           </div>
-        ))}
+        ) : (
+          items.map((item) => (
+            <div className="timeline-item" key={item.title}>
+              <div className="timeline-dot" />
+              <h4>
+                <Icon name={item.icon} size={16} className="inline-icon" /> {item.title}
+              </h4>
+              <p>
+                {item.text} • {item.time}
+              </p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

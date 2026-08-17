@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { baData } from "@/lib/data";
+import { initials } from "@/lib/initials";
 
 const ORDER = [1, 0, 2];
-const MEDALS = ["🥈", "🥇", "🥉"];
+const MEDAL_EMOJIS = ["🥈", "🥇", "🥉"];
 
 export default function Podium() {
   return (
     <div className="card panel leaderboard">
       <div className="toolbar">
-        <h2>TOP LEADERBOARD</h2>
+        <h2>Top leaderboard</h2>
         <Link className="btn" href="/leaderboard">
-          View All →
+          View All <ArrowRight size={13} aria-hidden="true" />
         </Link>
       </div>
 
@@ -21,8 +23,10 @@ export default function Podium() {
           const user = baData[i];
           return (
             <div className={`person${pos === 1 ? " first" : ""}`} key={user.name}>
-              <div className="medal">{MEDALS[pos]}</div>
-              <div className="face">{user.avatar}</div>
+              <div className="medal" aria-hidden="true">
+                {MEDAL_EMOJIS[pos]}
+              </div>
+              <div className="face">{initials(user.name)}</div>
               <b>{user.name}</b>
               <div className="xp">{user.xp.toLocaleString()} XP</div>
             </div>
@@ -34,10 +38,10 @@ export default function Podium() {
         <div className="rankrow" key={user.name}>
           <b>{index + 4}</b>
           <div className="usercell">
-            <span className="miniavatar">{user.avatar}</span>
+            <span className="miniavatar">{initials(user.name)}</span>
             {user.name}
           </div>
-          <strong style={{ color: "#65e5d8" }}>{user.xp.toLocaleString()} XP</strong>
+          <strong style={{ color: "var(--accent)" }}>{user.xp.toLocaleString()} XP</strong>
         </div>
       ))}
     </div>

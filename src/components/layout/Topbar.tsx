@@ -5,6 +5,7 @@ import { useApp } from "@/components/app-provider";
 import NotificationList from "@/components/notifications/NotificationList";
 import { PAGE_META, PERIODS, PROFILE } from "@/lib/data";
 import type { PeriodKey } from "@/lib/types";
+import { Bell, Menu, Shield } from "lucide-react";
 
 export default function Topbar({ onMenu }: { onMenu: () => void }) {
   const pathname = usePathname();
@@ -27,7 +28,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
     <header className="topbar">
       <div className="top-left">
         <button className="menu-btn" onClick={onMenu} aria-label="Toggle menu">
-          ☰
+          <Menu size={20} aria-hidden="true" />
         </button>
         <div className="greeting">
           <h1>{meta.title}</h1>
@@ -55,10 +56,10 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           ))}
         </select>
         <button className="pill button" onClick={openNotifications} aria-label="Notifications">
-          🔔 <span>{notifCount}</span>
+          <Bell size={16} aria-hidden="true" /> <span>{notifCount}</span>
         </button>
         <div className="pill level-pill">
-          🛡️ <b>LV. {PROFILE.level}</b>
+          <Shield size={14} aria-hidden="true" /> <b>LV. {PROFILE.level}</b>
           <br />
           {PROFILE.title}
         </div>

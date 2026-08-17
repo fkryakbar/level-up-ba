@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Plus } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import MissionItem from "@/components/missions/MissionItem";
 import NewMissionForm from "@/components/modals/NewMissionForm";
@@ -28,12 +29,12 @@ export default function MissionsPage() {
               })
             }
           >
-            + New Mission
+            <Plus size={16} aria-hidden="true" /> New Mission
           </button>
         }
       />
 
-      <div className="grid3">
+      <div className="grid-feature">
         {missions.map((m) => (
           <div className="card panel" key={m.title}>
             <MissionItem mission={m} />
