@@ -34,8 +34,8 @@ export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigat
   return (
     <aside className={`sidebar${open ? " open" : ""}`}>
       <div className="logo">
-        LEVEL <span>UP</span> <b className="logo-icon"><Zap size={18} fill="currentColor" aria-hidden="true" /></b>
-        <div className="tag">Play · Perform · Progress</div>
+        LEVEL UP <b className="logo-icon">★</b>
+        <div className="tag">PLAY • PERFORM • PROGRESS</div>
       </div>
 
       <nav className="nav">

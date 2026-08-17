@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useApp } from "@/components/app-provider";
 import NotificationList from "@/components/notifications/NotificationList";
 import { PAGE_META, PROFILE } from "@/lib/data";
-import { Bell, Menu, Trophy } from "lucide-react";
+import { Bell, Cloud, Menu, Gem } from "lucide-react";
 
 export default function Topbar({ onMenu }: { onMenu: () => void }) {
   const pathname = usePathname();
@@ -34,6 +34,11 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
     });
   };
 
+  // Add emoji trophy for leaderboard page header title if not present
+  const titleWithIcon = pathname === "/leaderboard" && !meta.title.includes("🏆") 
+    ? `${meta.title} 🏆` 
+    : meta.title;
+
   return (
     <header className="topbar">
       <div className="top-left">
@@ -41,7 +46,7 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
           <Menu size={20} aria-hidden="true" />
         </button>
         <div className="greeting">
-          <h1>{meta.title}</h1>
+          <h1>{titleWithIcon}</h1>
           <p>{meta.subtitle}</p>
         </div>
       </div>
@@ -60,32 +65,31 @@ export default function Topbar({ onMenu }: { onMenu: () => void }) {
             );
           }}
         >
-          {periods.length === 0 && <option value="">Memuat spreadsheet…</option>}
+          {periods.length === 0 && <option value="">Demo Data — Sheet kosong/tidak terbaca</option>}
           {periods.map((p) => (
             <option key={p.key} value={p.key}>
               {p.label}
             </option>
           ))}
         </select>
+
+        <div className="pill demo-pill" title="Demo Mode Active">
+          <Cloud size={14} aria-hidden="true" /> <span>Demo</span>
+        </div>
+
         <button className="pill button" onClick={openNotifications} aria-label="Notifications">
-          <Bell size={16} aria-hidden="true" /> <span>{notifCount}</span>
+          <Bell size={15} aria-hidden="true" /> <span>{notifCount}</span>
         </button>
+
         <div className="pill level-pill">
-          {topBa ? (
-            <>
-              <Trophy size={14} aria-hidden="true" /> <b>LV. {topBa.level}</b>
-              <br />
-              {topBa.levelName}
-            </>
-          ) : (
-            <>
-              <b>LV. {PROFILE.level}</b>
-              <br />
-              {PROFILE.title}
-            </>
-          )}
+          <Gem size={14} className="gem-icon" aria-hidden="true" />
+          <span>
+            <b>LV. {topBa ? topBa.level : PROFILE.level}</b>{" "}
+            <span className="level-title">{topBa ? topBa.levelName : PROFILE.title}</span>
+          </span>
         </div>
       </div>
     </header>
   );
 }
+

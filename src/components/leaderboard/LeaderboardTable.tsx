@@ -156,16 +156,18 @@ export default function LeaderboardTable() {
                     </div>
                   </td>
                   <td style={{ color: "var(--accent)", fontWeight: 800 }}>
-                    {user.xp.toLocaleString()}
+                    {user.xp.toLocaleString("id-ID")}
                   </td>
-                  <td>{user.sellout === null ? "—" : `${user.sellout}%`}</td>
-                  <td>{user.x2c ?? "—"}</td>
-                  <td>{user.review ?? "—"}</td>
+                  <td>{user.sellout === null ? "—" : `${user.sellout.toFixed(1).replace('.0', '')}%`}</td>
+                  <td>{user.x2c !== null && user.x2c !== undefined ? user.x2c.toFixed(1).replace('.0', '') : "—"}</td>
+                  <td>{user.review !== null && user.review !== undefined ? user.review.toFixed(1).replace('.0', '') : "—"}</td>
                   <td>
                     {user.streak ? (
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                        <Flame size={14} color="var(--gold)" aria-hidden="true" />
-                        {user.streak}
+                      <span className="streak-wrap">
+                        {Array.from({ length: Math.min(user.streak, 3) }).map((_, i) => (
+                          <span key={i} className="fire-icon">🔥</span>
+                        ))}
+                        <span className="streak-num">{user.streak}</span>
                       </span>
                     ) : (
                       "—"
