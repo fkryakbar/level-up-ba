@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PROFILE } from "@/lib/data";
-import { initials } from "@/lib/initials";
+import { getAvatarEmoji } from "@/lib/initials";
 import {
   Award,
   BarChart3,
@@ -59,7 +59,7 @@ export default function Sidebar({ open, onNavigate }: { open: boolean; onNavigat
       </nav>
 
       <div className="profile">
-        <div className="avatar">{initials(PROFILE.name)}</div>
+        <div className="avatar">{PROFILE.avatar || getAvatarEmoji(PROFILE.name)}</div>
         <b>{PROFILE.name}</b>
         <br />
         <small>{PROFILE.role}</small>

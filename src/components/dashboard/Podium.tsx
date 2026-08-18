@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { initials } from "@/lib/initials";
+import { getAvatarEmoji } from "@/lib/initials";
 import { useApp } from "@/components/app-provider";
 
 const ORDER = [1, 0, 2];
@@ -29,7 +29,7 @@ export default function Podium() {
               <div className="medal" aria-hidden="true">
                 {MEDAL_EMOJIS[pos]}
               </div>
-              <div className="face">{initials(user.name)}</div>
+              <div className="face">{user.avatar || getAvatarEmoji(user.name)}</div>
               <b>{user.name}</b>
               <div className="xp">{user.xp.toLocaleString()} XP</div>
             </div>
@@ -41,7 +41,7 @@ export default function Podium() {
         <div className="rankrow" key={user.name}>
           <b>{index + 4}</b>
           <div className="usercell">
-            <span className="miniavatar">{initials(user.name)}</span>
+            <span className="miniavatar">{user.avatar || getAvatarEmoji(user.name)}</span>
             {user.name}
           </div>
           <strong style={{ color: "var(--accent)" }}>{user.xp.toLocaleString()} XP</strong>

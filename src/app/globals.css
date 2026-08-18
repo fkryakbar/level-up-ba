@@ -721,6 +721,8 @@ svg.lucide, svg[width]{flex-shrink:0}
   place-items:center;
   background:#1e3558;
   flex:none;
+  font-size:16px;
+  line-height:1;
 }
 
 /* MISSIONS */

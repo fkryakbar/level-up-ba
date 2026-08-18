@@ -1,4 +1,5 @@
 import { google } from "googleapis";
+import { getAvatarEmoji } from "@/lib/initials";
 import type {
   Achievement,
   PerformanceBaRecord,
@@ -94,10 +95,7 @@ function monthLabel(month: string): string {
 }
 
 function initials(name: string): string {
-  const words = name.split(/\s+/).filter(Boolean);
-  if (words.length === 0) return "?";
-  if (words.length === 1) return words[0].slice(0, 1);
-  return `${words[0].slice(0, 1)}${words.at(-1)?.slice(0, 1) ?? ""}`;
+  return getAvatarEmoji(name);
 }
 
 function average(values: Array<number | null>): number {
@@ -319,7 +317,7 @@ function buildDataset(parsedPeriods: ParsedPeriod[]): PerformanceDataset {
       const level = levelForXp(state.xp);
       return {
         name: entry.name,
-        avatar: initials(entry.name),
+        avatar: getAvatarEmoji(entry.name),
         xp: state.xp,
         sellout: entry.sellout,
         x2c: entry.x2c,

@@ -140,6 +140,7 @@ export const PROFILE = {
   name: "Hanna",
   role: "Trainer",
   email: "hanna@levelupba.id",
+  avatar: "👩🏻",
   level: 4,
   title: "Superstar",
   xp: "1,250 / 1,800 XP",

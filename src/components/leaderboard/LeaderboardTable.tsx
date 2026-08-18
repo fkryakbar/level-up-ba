@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Flame, Search } from "lucide-react";
-import { initials } from "@/lib/initials";
+import { getAvatarEmoji } from "@/lib/initials";
 import { useApp } from "@/components/app-provider";
 import StatusBadge from "@/components/ui/StatusBadge";
 
@@ -151,7 +151,7 @@ export default function LeaderboardTable() {
                   </td>
                   <td>
                     <div className="usercell">
-                      <span className="miniavatar">{initials(user.name)}</span>
+                      <span className="miniavatar">{user.avatar || getAvatarEmoji(user.name)}</span>
                       <b>{user.name}</b>
                     </div>
                   </td>
